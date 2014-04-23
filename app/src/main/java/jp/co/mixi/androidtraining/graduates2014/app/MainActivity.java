@@ -4,11 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+
+import jp.co.mixi.androidtraining.graduates2014.app.provider.AssetsFileProvider;
 import jp.co.mixi.androidtraining.graduates2014.app.provider.NextActivity;
 
 
@@ -30,7 +31,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        Uri uri = Uri.parse("content://" + AssetsFileProvider.AUTHORITY + "/m_balloon_icon.png");
+
+        //Intent(From, To)
         Intent intent = new Intent(this, NextActivity.class);
+        intent.putExtra("AssetUri", uri.toString());
         startActivity(intent);
     }
 

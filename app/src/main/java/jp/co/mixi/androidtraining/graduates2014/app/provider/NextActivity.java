@@ -1,19 +1,50 @@
 package jp.co.mixi.androidtraining.graduates2014.app.provider;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+
+import java.io.IOException;
+import java.io.InputStream;
+
 import jp.co.mixi.androidtraining.graduates2014.app.R;
 
 public class NextActivity extends Activity {
+
+    private ImageView mImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_next);
+
+        mImageView = (ImageView)findViewById(R.id.image);
+
+        Intent received = getIntent();
+        String urlString = received.getStringExtra("AssetUri");
+        this.displayImage(urlString);
     }
 
+    private void displayImage(String urlString) {
+        if (urlString == null) {
+            return;
+        }
+
+        try {
+            Uri uri = Uri.parse(urlString);
+            InputStream in = getContentResolver().openInputStream(uri);
+            Bitmap bitmap = BitmapFactory.decodeStream(in);
+            mImageView.setImageBitmap(bitmap);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
