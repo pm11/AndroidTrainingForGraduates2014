@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,18 +26,31 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btn = (Button)findViewById(R.id.nextButton);
-        btn.setOnClickListener(this);
+        mImageUri = Uri.parse("content://" + AssetsFileProvider.AUTHORITY + "/m_balloon_icon.png");
+
+        Button nextButton = (Button)findViewById(R.id.nextButton);
+        nextButton.setOnClickListener(this);
+
+        Button cameraButton = (Button)findViewById(R.id.cameraButton);
+        cameraButton.setOnClickListener(this);
     }
 
-    @Override
     public void onClick(View v) {
-        Uri uri = Uri.parse("content://" + AssetsFileProvider.AUTHORITY + "/m_balloon_icon.png");
 
-        //Intent(From, To)
-        Intent intent = new Intent(this, NextActivity.class);
-        intent.putExtra("AssetUri", uri.toString());
-        startActivity(intent);
+
+        Intent intent = null;
+        switch (v.getId()){
+            case R.id.nextButton:
+                //Intent(From, To)
+                intent = new Intent(this, NextActivity.class);
+                intent.putExtra("AssetUri", mImageUri.toString());
+                startActivity(intent);
+                break;
+            case R.id.cameraButton:
+                intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivity(intent);
+                break;
+        }
     }
 
     @Override
