@@ -4,6 +4,7 @@
     <string name="app_name">AndroidTraning</string>
     <string name="action_settings">Settings</string>
     <string name="view_image">viewImage</string>
+    <string name="launch_camera">launch camera</string>
     <string name="title_activity_next">NextActivity</string>
     <string name="hello_world">Hello world!</string>
 

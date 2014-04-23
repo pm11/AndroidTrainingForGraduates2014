@@ -9,6 +9,16 @@
     tools:context="jp.co.mixi.androidtraining.graduates2014.app.MainActivity">
 
     <Button
+        android:id="@+id/cameraButton"
+        android:text="@string/launch_camera"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
         android:id="@+id/nextButton"
         android:text="@string/view_image"
         android:gravity="center"
@@ -17,5 +27,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+
 
 </RelativeLayout>
