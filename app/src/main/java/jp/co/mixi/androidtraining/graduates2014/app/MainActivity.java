@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+
+import java.io.File;
 
 import jp.co.mixi.androidtraining.graduates2014.app.provider.AssetsFileProvider;
 import jp.co.mixi.androidtraining.graduates2014.app.provider.NextActivity;
@@ -26,8 +29,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mImageUri = Uri.parse("content://" + AssetsFileProvider.AUTHORITY + "/m_balloon_icon.png");
-
         Button nextButton = (Button)findViewById(R.id.nextButton);
         nextButton.setOnClickListener(this);
 
@@ -36,19 +37,22 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     public void onClick(View v) {
-
-
         Intent intent = null;
         switch (v.getId()){
             case R.id.nextButton:
-                //Intent(From, To)
+                mImageUri = Uri.parse("content://" + AssetsFileProvider.AUTHORITY + "/m_balloon_icon.png");
                 intent = new Intent(this, NextActivity.class);
                 intent.putExtra("AssetUri", mImageUri.toString());
                 startActivity(intent);
                 break;
             case R.id.cameraButton:
+                File folder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                String file = "tmp_" + String.valueOf(System.currentTimeMillis()) + ".jpg";
+                File photo = new File(folder, file);
+                mImageUri =  Uri.fromFile(photo);
                 intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivity(intent);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+                startActivityForResult(intent, REQUEST_CODE);
                 break;
         }
     }
@@ -76,8 +80,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE) {
-            // ImageViewActivity を呼び出す
+            Intent intent = new Intent(this, NextActivity.class);
+            intent.putExtra("AssetUri", mImageUri.getPath());
+            intent.putExtra("IsCamera", true);
+            startActivity(intent);
         }
-
     }
 }

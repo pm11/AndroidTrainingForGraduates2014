@@ -28,18 +28,23 @@ public class NextActivity extends Activity {
 
         Intent received = getIntent();
         String urlString = received.getStringExtra("AssetUri");
-        this.displayImage(urlString);
-    }
+        Boolean isCamera = received.getBooleanExtra("IsCamera", false);
 
-    private void displayImage(String urlString) {
         if (urlString == null) {
             return;
         }
 
+        Uri uri = Uri.parse(urlString);
+
+
         try {
-            Uri uri = Uri.parse(urlString);
-            InputStream in = getContentResolver().openInputStream(uri);
-            Bitmap bitmap = BitmapFactory.decodeStream(in);
+            Bitmap bitmap;
+            if(isCamera) {
+                bitmap = BitmapFactory.decodeFile(uri.getPath());
+            } else {
+                InputStream in = getContentResolver().openInputStream(uri);
+                bitmap = BitmapFactory.decodeStream(in);
+            }
             mImageView.setImageBitmap(bitmap);
         } catch (IOException e) {
             e.printStackTrace();
